@@ -1,6 +1,6 @@
 # Training base tag: mutable. Record the built image ID and promote that same image.
 # See docs/deployment.md for digest pinning before real deployment.
-FROM python:3.12-slim
+FROM python:3.12-alpine
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 COPY guardrails/ ./guardrails/
