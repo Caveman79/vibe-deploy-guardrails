@@ -121,3 +121,7 @@ The first hosted scan found HIGH/CRITICAL findings in the Debian slim base. This
 standard-library-only app now uses the official Alpine variant to reduce unused OS
 components. Alpine uses musl rather than glibc; revisit compatibility if native Python
 packages are added. The same tests and full HIGH/CRITICAL scan remain required.
+
+The image build also requires the Alpine `libuuid` security update (at least
+`2.42.3-r1`). Package repository contents can change, so preserve and promote the
+built image ID/digest instead of assuming a later rebuild is identical.
