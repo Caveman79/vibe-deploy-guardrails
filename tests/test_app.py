@@ -1,11 +1,13 @@
 import itertools
 import json
+import queue
+from unittest.mock import patch
 import threading
 import unittest
 from http.server import ThreadingHTTPServer
 from urllib.error import HTTPError
 from urllib.request import urlopen
-from guardrails.app import CHECKS, Config, handler_for, in_cohort, is_ready
+from guardrails.app import LOG, CHECKS, Config, handler_for, in_cohort, is_ready
 
 
 class LogicTests(unittest.TestCase):
@@ -86,8 +88,21 @@ class HTTPTests(unittest.TestCase):
         self.assertEqual(self.get("/.env")[0], 404)
 
     def test_logs_exclude_query_and_unknown_path(self):
-        with self.assertLogs("guardrails", level="INFO") as logs:
-            self.get("/private-demo-secret?token=demo-secret")
+        messages = queue.Queue()
+        original_info = LOG.info
+
+        def capture(message):
+            original_info(message)
+            messages.put(json.loads(message))
+
+        # The response can arrive before the server thread emits its log.
+        # Wait for this request's event rather than relying on thread timing.
+        with self.assertLogs("guardrails", level="INFO") as logs, patch.object(LOG, "info", side_effect=capture):
+            _, headers, _ = self.get("/private-demo-secret?token=demo-secret")
+            while True:
+                event = messages.get(timeout=3)
+                if event["request_id"] == headers["X-Request-ID"]:
+                    break
         self.assertNotIn("demo-secret", "".join(logs.output))
         self.assertIn('"route": "unknown"', "".join(logs.output))
 

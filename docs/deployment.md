@@ -100,7 +100,7 @@ requirements. Use a production server with TLS and appropriate authentication. S
 service identities and data, centralize logs/metrics, test backups and define who can release.
 
 Resolve a reviewed base-image digest from the official registry, change `FROM` to
-`python:3.12-slim@sha256:THE_VERIFIED_DIGEST`, and review updates regularly. The provided
+`python:3.12-alpine@sha256:THE_VERIFIED_DIGEST`, and review updates regularly. The provided
 Dockerfile uses a mutable training tag for accessibility; builds on different dates may differ.
 The literal placeholder above is an explanation, not a runnable Dockerfile line.
 
@@ -114,3 +114,14 @@ The repository's manual workflow is a rehearsal, not full production CD. A real 
 pipeline should promote an already-tested artifact through staging and a protected release
 job, verify deployment, and retain auditable evidence. Configure the target-specific
 implementation only after those requirements are chosen.
+
+## Base-image choice
+
+The first hosted scan found HIGH/CRITICAL findings in the Debian slim base. This
+standard-library-only app now uses the official Alpine variant to reduce unused OS
+components. Alpine uses musl rather than glibc; revisit compatibility if native Python
+packages are added. The same tests and full HIGH/CRITICAL scan remain required.
+
+The image build also requires the Alpine `libuuid` security update (at least
+`2.42.3-r1`). Package repository contents can change, so preserve and promote the
+built image ID/digest instead of assuming a later rebuild is identical.

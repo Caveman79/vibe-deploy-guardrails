@@ -1,6 +1,8 @@
 # Training base tag: mutable. Record the built image ID and promote that same image.
 # See docs/deployment.md for digest pinning before real deployment.
-FROM python:3.12-slim
+FROM python:3.12-alpine
+# Apply the upstream fix for the inherited libuuid package before dropping privileges.
+RUN apk add --no-cache "libuuid>=2.42.3-r1"
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 COPY guardrails/ ./guardrails/
