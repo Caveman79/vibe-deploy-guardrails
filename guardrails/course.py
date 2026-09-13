@@ -29,7 +29,17 @@ def lesson(name):
     if name not in FILES or not FILES[name].is_file():
         raise ValueError('unknown lesson')
     source=FILES[name]; out=[]; code=None; language=''; table=False; listing=False
-    for line in source.read_text().splitlines():
+    # Preserve fenced code but join Markdown soft line breaks into paragraphs.
+    lines=[]; paragraph=[]; fenced=False
+    for raw in source.read_text().splitlines():
+        boundary = fenced or not raw.strip() or raw.startswith(('#','|','```')) or re.match(r'^[-*] |^[0-9]+[.] ',raw)
+        if boundary:
+            if paragraph: lines.append(' '.join(paragraph)); paragraph=[]
+            lines.append(raw)
+        else: paragraph.append(raw.strip())
+        if raw.startswith('```'): fenced=not fenced
+    if paragraph: lines.append(' '.join(paragraph))
+    for line in lines:
         if not line.startswith('|') and table:
             out.append('</tbody></table></div>'); table=False
         if not re.match(r'^[-*] |^[0-9]+[.] ',line) and listing:
