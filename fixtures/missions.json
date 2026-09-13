@@ -1,0 +1,34 @@
+[
+  {
+    "mission_id": "M01",
+    "customer_id": "C01"
+  },
+  {
+    "mission_id": "M02",
+    "customer_id": "C01"
+  },
+  {
+    "mission_id": "M03",
+    "customer_id": "C02"
+  },
+  {
+    "mission_id": "M04",
+    "customer_id": "C02"
+  },
+  {
+    "mission_id": "M05",
+    "customer_id": "C01"
+  },
+  {
+    "mission_id": "M06",
+    "customer_id": "C02"
+  },
+  {
+    "mission_id": "M07",
+    "customer_id": "C01"
+  },
+  {
+    "mission_id": "M08",
+    "customer_id": "C02"
+  }
+]

@@ -1,3 +1,13 @@
+# Validation status
+
+## v0.3 operator bridge
+
+Local checks on 2026-09-13: 16 standard-library tests and 4 optional data-tool tests pass on Python 3.14.4; all local Markdown links resolve. Verified all nine reference SQL queries, 8-mission pagination, 4 accepted / 5 quarantined intake rows and 135 accepted minutes. Browser navigation from home to SQL lesson 1 displays explanations and labeled command boxes.
+
+Hosted checks passed for commit `59d8564f6f436c859d8bd3d0270e343381fb1953`: [CI tests, Python 3.12 data toolkit and container check](https://github.com/Caveman79/vibe-deploy-guardrails/actions/runs/34755456440), and [source/dependency/image security scans](https://github.com/Caveman79/vibe-deploy-guardrails/actions/runs/34755456446). Consult the pull request checks for subsequent revisions. The local environment has no Docker runtime. Branch protection is not enabled, and an independent human review and complete release/rollback rehearsal have not been performed for this update. The course includes those exercises; supplying an exercise is not evidence that a learner completed it.
+
+## Previous release evidence
+
 # Validation record — 2026-09-12
 
 The course is published at [Caveman79/vibe-deploy-guardrails](https://github.com/Caveman79/vibe-deploy-guardrails).

@@ -8,9 +8,13 @@ import json
 import logging
 import os
 import re
+import sqlite3
 import time
 from urllib.parse import parse_qs, urlsplit
 import uuid
+from guardrails import ui, course
+from ops_data import api as data_api
+from ops_data.seed import DEFAULT_DB
 
 LOG = logging.getLogger("guardrails")
 CHECKS = ("review", "tests", "rollback")
@@ -48,22 +52,10 @@ def in_cohort(cohort, percent):
     return bucket < percent
 
 
-PAGE = b"""<!doctype html><html lang="en"><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Release Readiness | Vibe Deploy Guardrails</title>
-<style>body{font:18px/1.6 system-ui;max-width:740px;margin:64px auto;padding:0 24px;color:#183047;background:#f5f8fa}h1{line-height:1.15}a{color:#005ea8}li{margin:12px 0}small{color:#485e70}</style>
-<small>VIBE DEPLOY GUARDRAILS / LOCAL TRAINING APP</small>
-<h1>Good deployment is controlled change.</h1>
-<p>Before release: independent review, functional checks, and a known-good recovery plan.</p>
-<ul><li><a href="/healthz">Check service health</a></li>
-<li><a href="/api/readiness?review=true&amp;tests=true&amp;rollback=true">All evidence present</a></li>
-<li><a href="/api/readiness?review=true&amp;tests=false&amp;rollback=true">Functional check failed</a></li>
-<li><a href="/api/readiness?cohort=training-team">Missing evidence</a></li></ul>
-<p>This app reports supplied evidence. It does not verify approvals or authorize a real release.</p>
-</html>"""
+PAGE = ui.home()
 
 
-def handler_for(config):
+def handler_for(config, db_path=DEFAULT_DB):
     class Handler(BaseHTTPRequestHandler):
         server_version = "Guardrails"
         sys_version = ""
@@ -85,13 +77,30 @@ def handler_for(config):
             content_type = "application/json"
             try:
                 url = urlsplit(self.path)
-                route = url.path if url.path in {"/", "/healthz", "/api/readiness"} else "unknown"
+                route = url.path if url.path in {"/", "/course", "/lesson", "/learn", "/check", "/healthz", "/api/readiness", "/api/missions", "/api/ops-summary", "/api/customer-config"} else "unknown"
                 if route == "/":
                     body = PAGE
                     content_type = "text/html; charset=utf-8"
+                elif route == "/course":
+                    body = course.index()
+                    content_type = "text/html; charset=utf-8"
+                elif route == "/lesson":
+                    query = parse_qs(url.query, keep_blank_values=True, max_num_fields=1)
+                    if set(query) != {"name"} or len(query["name"]) != 1:
+                        raise ValueError("invalid lesson")
+                    body = course.lesson(query["name"][0])
+                    content_type = "text/html; charset=utf-8"
+                elif route in {"/api/missions", "/api/ops-summary", "/api/customer-config"}:
+                    status, body = data_api.response(route, url.query, self.headers.get("Authorization", ""), db_path)
+                elif route == "/learn":
+                    query = parse_qs(url.query, keep_blank_values=True, max_num_fields=1)
+                    if set(query) != {"step"} or query["step"] not in [[str(i)] for i in range(1, 6)]:
+                        raise ValueError("invalid lesson step")
+                    body = ui.lesson(int(query["step"][0]), config, is_ready)
+                    content_type = "text/html; charset=utf-8"
                 elif route == "/healthz":
                     body = {"status": "ok", "environment": config.environment, "version": config.version}
-                elif route == "/api/readiness":
+                elif route in {"/api/readiness", "/check"}:
                     if len(url.query) > 1024:
                         raise ValueError("query too long")
                     query = parse_qs(url.query, keep_blank_values=True, max_num_fields=4)
@@ -109,10 +118,15 @@ def handler_for(config):
                     body = {"ready": is_ready(checks), "checks": checks, "version": config.version}
                     if in_cohort(cohort, config.rollout_percent):
                         body["guidance"] = "Confirm independent review and rehearse recovery before release."
+                    if route == "/check":
+                        body = ui.check_page(body)
+                        content_type = "text/html; charset=utf-8"
                 else:
                     status, body = 404, {"error": "not found"}
             except ValueError:
                 status, body = 400, {"error": "invalid request"}
+            except sqlite3.Error:
+                status, body = 503, {"error": "training database unavailable; run python3 -m ops_data.seed in the course folder"}
             payload = body if isinstance(body, bytes) else json.dumps(body).encode()
             self.send_response(status)
             self.send_header("Content-Type", content_type)

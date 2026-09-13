@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.0 — Operator technical bridge
+
+Added SQL-first synthetic UAS data, nine SQL lessons, six Python/API lessons, guided browser course reader, unaided checkpoints, a 12-week plan, integrated capstone, interview drills and fictional case-study support. Preserved the deployment labs and extended tests and optional dependency scanning.
+
+
 ## 0.2.0 — Prepared 2026-09-12
 
 - Rebuilt the course from the supplied brief and accessible conversation preview.

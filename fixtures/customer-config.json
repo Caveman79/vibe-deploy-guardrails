@@ -1,0 +1,6 @@
+{
+  "customer_id": "C01",
+  "environment": "staging",
+  "max_wind_kts": 20,
+  "release_version": "r2"
+}

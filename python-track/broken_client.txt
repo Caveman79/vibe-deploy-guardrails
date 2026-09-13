@@ -1,0 +1,9 @@
+# Review-only pseudocode: do not run against external services.
+response = requests.get(base + "/api/missions", verify=False)
+try:
+    return response.json()["items"]
+except Exception:
+    return []
+
+Questions: Where is the timeout? Status check? Pagination? Does [] mean no missions
+or a failed request? Why was TLS verification removed? What should be logged?
