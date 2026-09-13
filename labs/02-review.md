@@ -10,7 +10,7 @@ intent, assumptions and missing checks. Prerequisite: Lab 01.
 ## Procedure
 
 1. Start on `main` with a clean status. Run `git switch -c practice/review-wording`.
-2. Ask an AI assistant to improve one sentence in the app's home-page `PAGE` text.
+2. Ask an AI assistant to improve one sentence in the app's home-page text in `guardrails/ui.py`.
    Require it to keep endpoints and release logic unchanged.
 3. Run `git diff`. Identify every changed file and explain every changed line.
 4. Run the tests. Confirm the links still describe their behavior.

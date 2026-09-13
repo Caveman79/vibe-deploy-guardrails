@@ -66,7 +66,7 @@ class HTTPTests(unittest.TestCase):
             return response.status, response.headers, response.read()
 
     def test_homepage_and_health(self):
-        self.assertIn(b"controlled change", self.get("/")[2])
+        self.assertIn(b"Start lesson 1", self.get("/")[2])
         status, headers, body = self.get("/healthz")
         self.assertEqual(status, 200)
         self.assertEqual(json.loads(body), {"status": "ok", "environment": "test", "version": "test-build"})

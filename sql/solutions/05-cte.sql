@@ -1,0 +1,1 @@
+WITH totals AS (SELECT m.customer_id, SUM(f.minutes) AS total_minutes FROM missions m JOIN flight_logs f ON f.mission_id=m.mission_id GROUP BY m.customer_id) SELECT customer_id,total_minutes FROM totals WHERE total_minutes > (SELECT AVG(total_minutes) FROM totals);

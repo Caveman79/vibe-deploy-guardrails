@@ -1,0 +1,3 @@
+# Optional Phase 2 learning tools; not installed in the reference server image.
+pandas==3.0.5
+requests==2.34.2

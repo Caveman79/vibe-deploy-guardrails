@@ -22,7 +22,7 @@ jobs:
       - name: Scan source for secrets and configuration issues
         run: >-
           docker run --rm -v "$PWD:/src:ro" aquasec/trivy:0.69.3
-          fs --scanners secret,misconfig --exit-code 1 --severity HIGH,CRITICAL /src
+          fs --scanners vuln,secret,misconfig --exit-code 1 --severity HIGH,CRITICAL /src
       - name: Scan OS and Python runtime dependencies
         run: |
           docker save guardrails:scan -o /tmp/guardrails-image.tar

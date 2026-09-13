@@ -24,7 +24,7 @@ and `echo "$BASELINE_COMMIT"`. Retain this local image; do not prune it during t
 
 ## 2. Build a distinct candidate
 
-In `guardrails/app.py`, add a short sentence to the home-page HTML `PAGE`, such as
+In `guardrails/ui.py`, add a short sentence to the HTML returned by `home()`, such as
 `<p>Training candidate: recovery procedure rehearsed.</p>`. Keep the endpoints and rule unchanged.
 Inspect the diff, run tests and commit:
 

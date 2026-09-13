@@ -34,3 +34,7 @@ Be respectful, specific and patient. Critique the change, not the contributor. D
 harass, disclose private information or treat a beginner's question as a failure.
 Maintainers may remove abusive content and restrict participation. Use GitHub's reporting
 mechanism for abuse; report security issues through the process in SECURITY.md.
+
+## Data and course changes
+
+Keep all fixtures fictional. Update the expected totals, unaided checkpoints and reference answers together when changing fixtures. Run both test suites for optional data-tool changes. Regenerate the full hash lock when updating `requirements-data.in`; do not drop `--require-hashes` to make an update pass. State which learner path you tried and where its explanation was confusing.

@@ -15,3 +15,11 @@ versions can change; verify the current page when configuring a real repository.
 The course deliberately uses no third-party Python runtime packages. Its versioned
 scanner Docker tag and mutable Python base tag are not immutable digest pins; the labs
 explain how to improve provenance and record the images actually used.
+
+## Data and integration track
+
+- [SQLite SELECT syntax](https://www.sqlite.org/lang_select.html)
+- [SQLite date and time functions](https://www.sqlite.org/lang_datefunc.html)
+- [SQLite window functions](https://www.sqlite.org/windowfunctions.html)
+- [pandas read_csv](https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html)
+- [Requests quickstart: status, timeouts and JSON](https://requests.readthedocs.io/en/latest/user/quickstart/)

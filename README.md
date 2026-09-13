@@ -1,92 +1,73 @@
 # Vibe Deploy Guardrails
 
-**Build with AI. Release with evidence. Recover with confidence.**
+**Build with AI. Release with evidence.**
 
-A hands-on introduction to software deployment for operators, founders, product people,
-transitioning military members, and anyone whose coding experience starts with Python
-notebooks and AI experimentation.
+A practical technical bridge for experienced operators, founders, product people and transitioning military members who use AI to code. Start with SQL, learn Python and APIs, then practice controlled software deployment. Basic Python familiarity helps; professional engineering experience is not assumed.
 
-You do not need to become a software engineer to ask useful release questions:
-**What changed? Who checked it? Does it work? What can it access? How do we recover?**
+AI can produce working-looking software faster than a learner can evaluate its assumptions. This course builds the ability to inspect the data, ask useful technical questions, test a change and recover a known-good state. Functional checks, independent verification and configuration control provide useful operational parallels.
 
-This course turns those questions into habits through a small Python app and 12 practical
-labs. You will deliberately break a functional check, review a change, package a release,
-inspect logs, introduce a feature gradually, and restore a known-good state.
+## Start with one lesson
 
-> **Training release: v0.2.0.** The app runs locally and uses no paid service, API key,
-> or third-party Python package. Docker and a GitHub account are needed for later labs.
-> This is a deployment learning environment, not an internet-facing production server.
-
-## Start here
-
-Download and extract the repository, or clone your copy from GitHub. Open a terminal
-in the folder containing this README. Commands below use Bash on macOS, Linux, or
-Windows through WSL. See [setup and troubleshooting](docs/setup.md) if those words are new.
-Use Python 3.12 or newer.
+Use Python 3.12 or newer and a Bash terminal in the repository folder. The browser and SQL lessons need no third-party Python packages. Later Python lessons install a separate, pinned data toolkit; Docker and GitHub are introduced later.
 
 ```bash
-python3 --version
-python3 -m unittest discover -s tests -v
+python3 -m ops_data.seed
 python3 -m guardrails.app
 ```
 
-Open **http://127.0.0.1:8000** in your browser. Choose “All evidence present” and then
-“Functional check failed.” The first returns `"ready": true`; the second returns
-`"ready": false`. Stop the app with **Ctrl+C**.
+Seed once. If the database already exists, keep it and proceed to the second command. Open [your local course](http://127.0.0.1:8000) and choose **Start lesson 1**. Read explanations in the browser; run labeled commands in a second terminal. Leave the server terminal running. Stop it with Ctrl+C.
 
-In a second terminal, while the app is running:
+[Detailed setup](START_HERE.md) · [Course map](CURRICULUM.md) · [Progress checkpoints](assessments/checkpoints.md)
 
-```bash
-python3 scripts/smoke.py
-```
+## What you build
 
-Expected: `PASS: identity, health, approval and hold behavior`.
-A smoke test is a short functional check of a running system.
+A fictional UAS company needs a reliable customer briefing from mission, qualification, aircraft, maintenance and flight records. You will inspect its SQLite database, diagnose bad queries, quarantine questionable CSV rows, fetch paginated API data and implement a tested briefing change. Then package, observe and recover a local release.
 
-**Next: [Lab 00 — Establish a baseline](labs/00-baseline.md).**
+The repository supplies fixtures, reference tools and worked solutions. Your portfolio contribution is the queries, explanations, tests, changes and release evidence you produce yourself. Keep assisted work distinct from unaided demonstrations. This is training, not a claim of professional software engineering or production deployment experience.
 
-## What you will practice
+## The learning route
 
-Plan on roughly 8–12 hours, spread over several sessions. Allow additional time for
-first-time Git, Docker, and GitHub setup. Each lab gives you a mission, steps, expected
-results, a fault to investigate, recovery instructions, and evidence to keep.
+The default route is 12 weeks at 8–10 hours a week, with checkpoints every two weeks. An eight-week foundation route is available; repeat exercises and extend the schedule when needed. Completion is measured by evidence and explanation, not elapsed time.
 
-| Lab | Mission | Operational connection |
-| --- | --- | --- |
-| [00](labs/00-baseline.md) | Run and identify the app | Establish a baseline |
-| [01](labs/01-git.md) | Track and reverse changes | Configuration control |
-| [02](labs/02-review.md) | Review an AI-assisted change | Independent verification |
-| [03](labs/03-testing.md) | Prove the release rule | Functional checks |
-| [04](labs/04-configuration.md) | Separate environments and secrets | Correct configuration for the mission |
-| [05](labs/05-dependencies.md) | Inspect dependencies and scans | Parts provenance and service bulletins |
-| [06](labs/06-docker.md) | Package and restrict the app | Controlled equipment configuration |
-| [07](labs/07-ci.md) | Require automated checks | Release gates |
-| [08](labs/08-observability.md) | Read operating evidence | Instrumentation and fault isolation |
-| [09](labs/09-release-rollback.md) | Rehearse promotion and recovery | Return to service and known-good state |
-| [10](labs/10-flags.md) | Expose a feature gradually | Limited introduction with stop criteria |
-| [11](labs/11-capstone.md) | Deliver an AI-assisted change | Complete change-control package |
+| Phase | Practice |
+| --- | --- |
+| 1. Data fluency | Nine SQLite labs: filters, aggregation, joins, CTEs, dates, windows, NULLs, duplicates and query debugging |
+| 2. Python for operators | Six labs: pandas, CSV/JSON, validation, requests, pagination, authentication, configuration and automation |
+| 3. Change control | Git, branches, PRs, review and automated functional tests |
+| 4. Reproducible environments | Dependencies, secrets, least privilege and Docker |
+| 5. Deployment | CI/CD, environment boundaries, health checks and logs |
+| 6. Safe release | Known-good state, rollback, progressive rollout and audit records |
+| 7. Security and AI review | Scans, access controls, insecure defaults and unsupported assumptions |
+| 8. Capstone | Customer briefing, controlled release rehearsal, interview demonstration and case study |
 
-These analogies support learning; this course is not an aviation procedure or certification.
-The app's “ready” result evaluates supplied booleans. It cannot establish that a human
-review actually happened or authorize a real release.
+The [curriculum](CURRICULUM.md) links every lesson and preserves the original 12 deployment labs. [Interview translation](INTERVIEW_TRANSLATION.md) and [case studies](case-studies/README.md) help turn demonstrated learning into honest portfolio evidence.
 
-## How the pieces fit
+## Architecture and limits
 
 ```mermaid
 flowchart LR
-    A[Change on a branch] --> B[Pull request and independent review]
-    B --> C[Tests and scans]
-    C --> D[Build identified image]
-    D --> E[Staging functional check]
-    E --> F[Release authority]
-    F --> G[Limited rollout and observation]
-    G --> H[Continue or restore known-good image]
+    F[Fictional fixtures] --> D[Read-only SQLite database]
+    D --> Q[SQL exercises]
+    D --> A[Local Python HTTP app]
+    A --> B[Guided browser lessons]
+    A --> C[Paginated API client]
+    F --> P[Pandas intake validator]
+    C --> E[Learner briefing and evidence]
+    P --> E
 ```
 
-The included CI checks pull requests. The manual **Release rehearsal** workflow runs
-an ephemeral container on a GitHub runner and records evidence. It does not publish
-an image or deploy a hosted service. The [deployment guide](docs/deployment.md) explains
-that boundary and the additional controls needed for real hosting.
+The server uses Python’s standard library. The optional data toolkit uses pandas and requests. A demonstration token protects a local configuration endpoint; it is not production customer authorization. Synthetic wind limits and readiness checks are not aviation guidance. The server is for local practice, not internet hosting.
+
+CI runs tests and builds a container. The Release rehearsal workflow operates an ephemeral container on a GitHub runner; it does not deploy a hosted service. Repository protection and release approval require explicit GitHub configuration. See [deployment boundaries](docs/deployment.md) and the [scenario](docs/scenario.md).
+
+## Check your setup
+
+```bash
+python3 -m unittest discover -s tests -v
+python3 scripts/check_docs.py
+```
+
+For Phase 2, follow its virtual-environment setup and install `requirements-data.txt` with `--require-hashes`, then run `python -m unittest discover -s tests_data -v`.
 
 ## Keep these beside your AI assistant
 
@@ -100,7 +81,10 @@ that boundary and the additional controls needed for real hosting.
 
 ```text
 guardrails/       Small, read-only Python web app
-labs/             Sequential exercises and a capstone
+lessons/          SQL and Python learning tracks
+ops_data/         SQLite, validation and API reference tools
+labs/             Preserved deployment guardrails exercises
+assessments/      Milestones and unaided checkpoints
 tests/           Functional-rule and HTTP integration tests
 scripts/          Smoke test, container check, documentation check
 .github/          CI, scans, rehearsal, contribution templates
