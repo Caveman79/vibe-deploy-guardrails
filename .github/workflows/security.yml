@@ -27,3 +27,8 @@ jobs:
         run: |
           docker save guardrails:scan -o /tmp/guardrails-image.tar
           docker run --rm -v /tmp/guardrails-image.tar:/scan/image.tar:ro aquasec/trivy:0.69.3 image --input /scan/image.tar --exit-code 1 --severity HIGH,CRITICAL
+      - name: Scan optional data toolkit lock
+        run: |
+          mkdir -p /tmp/guardrails-data-scan
+          cp requirements-data.txt /tmp/guardrails-data-scan/requirements.txt
+          docker run --rm -v /tmp/guardrails-data-scan:/src:ro aquasec/trivy:0.69.3 fs --scanners vuln --exit-code 1 --severity HIGH,CRITICAL /src

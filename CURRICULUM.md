@@ -71,8 +71,7 @@ a broken example, AI pitfall, verification task and role connection for each pha
 
 ## Phase 8 — Integrated capstone
 
-Use [the operational capstone](CAPSTONE.md). The smaller [original readiness-feature
-capstone](labs/11-capstone.md) remains available as a rehearsal or extension.
+Use [the operational capstone](CAPSTONE.md). The smaller [original readiness-feature capstone](labs/11-capstone.md) remains available as a rehearsal or extension.
 
 Finish with [interview translation](INTERVIEW_TRANSLATION.md), practical drills,
 a sanitized [case-study template](case-studies/TEMPLATE.md), and the portfolio checklist.
